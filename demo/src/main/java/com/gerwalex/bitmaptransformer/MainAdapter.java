@@ -57,8 +57,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     public void onBindViewHolder(MainAdapter.ViewHolder holder, int position) {
         switch (mDataSet.get(position)) {
             case Mask: {
-                int width = Utils.toDp(mContext, 266.66f);
-                int height = Utils.toDp(mContext, 252.66f);
+                int width = BitmapUtils.toDp(mContext, 266.66f);
+                int height = BitmapUtils.toDp(mContext, 252.66f);
                 Picasso
                         .get()
                         .load(R.drawable.check)
@@ -69,8 +69,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 break;
             }
             case NinePatchMask: {
-                int width = Utils.toDp(mContext, 300.0f);
-                int height = Utils.toDp(mContext, 200.0f);
+                int width = BitmapUtils.toDp(mContext, 300.0f);
+                int height = BitmapUtils.toDp(mContext, 200.0f);
                 Picasso
                         .get()
                         .load(R.drawable.check)
