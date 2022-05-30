@@ -1,5 +1,6 @@
-package com.gerwalex.bitmaptransformer;
+package com.gerwalex.bitmaptransformer.demo;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PointF;
@@ -9,13 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.gerwalex.bitmaptransformer.BitmapUtils;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
-import jp.wasabeef.example.picasso.R;
 import jp.wasabeef.picasso.transformations.BlurTransformation;
 import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
 import jp.wasabeef.picasso.transformations.CropCircleTransformation;
@@ -38,12 +41,13 @@ import jp.wasabeef.picasso.transformations.gpu.VignetteFilterTransformation;
 /**
  * Created by Wasabeef on 2015/01/11.
  */
-public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
+public class PicassoAdapter extends RecyclerView.Adapter<PicassoAdapter.ViewHolder> {
 
     private final Context mContext;
     private final List<Type> mDataSet;
+    private File file;
 
-    public MainAdapter(Context context, List<Type> dataSet) {
+    public PicassoAdapter(Context context, List<Type> dataSet) {
         mContext = context;
         mDataSet = dataSet;
     }
@@ -54,17 +58,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(MainAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PicassoAdapter.ViewHolder holder, int position) {
         switch (mDataSet.get(position)) {
             case Mask: {
                 int width = BitmapUtils.toDp(mContext, 266.66f);
                 int height = BitmapUtils.toDp(mContext, 252.66f);
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .resize(width, height)
                         .centerCrop()
-                        .transform((new MaskTransformation(mContext, R.drawable.mask_starfish)))
+                        .transform(new MaskTransformation(mContext, R.drawable.mask_starfish))
                         .into(holder.image);
                 break;
             }
@@ -73,7 +77,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 int height = BitmapUtils.toDp(mContext, 200.0f);
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .resize(width, height)
                         .centerCrop()
                         .transform(new MaskTransformation(mContext, R.drawable.chat_me_mask))
@@ -83,7 +87,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropLeftTop:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.LEFT,
                                 CropTransformation.GravityVertical.TOP))
                         .into(holder.image);
@@ -91,7 +95,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropLeftCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         // 300, 100, CropTransformation.GravityHorizontal.LEFT, CropTransformation.GravityVertical.CENTER))
                         .transform(new CropTransformation(300, 100))
                         .into(holder.image);
@@ -99,7 +103,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropLeftBottom:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.LEFT,
                                 CropTransformation.GravityVertical.BOTTOM))
                         .into(holder.image);
@@ -107,7 +111,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropCenterTop:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.CENTER,
                                 CropTransformation.GravityVertical.TOP))
                         .into(holder.image);
@@ -115,14 +119,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropCenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100))
                         .into(holder.image);
                 break;
             case CropCenterBottom:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.CENTER,
                                 CropTransformation.GravityVertical.BOTTOM))
                         .into(holder.image);
@@ -130,7 +134,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropRightTop:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.RIGHT,
                                 CropTransformation.GravityVertical.TOP))
                         .into(holder.image);
@@ -138,7 +142,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropRightCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.RIGHT,
                                 CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -146,7 +150,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropRightBottom:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(300, 100, CropTransformation.GravityHorizontal.RIGHT,
                                 CropTransformation.GravityVertical.BOTTOM))
                         .into(holder.image);
@@ -154,7 +158,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case Crop169CenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation((float) 16 / (float) 9,
                                 CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -162,7 +166,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case Crop43CenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation((float) 4 / (float) 3,
                                 CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -170,7 +174,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case Crop31CenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(3, CropTransformation.GravityHorizontal.CENTER,
                                 CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -178,7 +182,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case Crop31CenterTop:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(3, CropTransformation.GravityHorizontal.CENTER,
                                 CropTransformation.GravityVertical.TOP))
                         .into(holder.image);
@@ -186,7 +190,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropSquareCenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation(1, CropTransformation.GravityHorizontal.CENTER,
                                 CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -194,7 +198,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropQuarterCenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation((float) 0.5, (float) 0.5,
                                 CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -202,7 +206,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropQuarterCenterTop:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation((float) 0.5, (float) 0.5,
                                 CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.TOP))
                         .into(holder.image);
@@ -210,7 +214,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropQuarterBottomRight:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation((float) 0.5, (float) 0.5,
                                 CropTransformation.GravityHorizontal.RIGHT, CropTransformation.GravityVertical.BOTTOM))
                         .into(holder.image);
@@ -218,7 +222,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropHalfWidth43CenterCenter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropTransformation((float) 0.5, 0, (float) 4 / (float) 3,
                                 CropTransformation.GravityHorizontal.CENTER, CropTransformation.GravityVertical.CENTER))
                         .into(holder.image);
@@ -226,35 +230,35 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case CropSquare:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropSquareTransformation())
                         .into(holder.image);
                 break;
             case CropCircle:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new CropCircleTransformation())
                         .into(holder.image);
                 break;
             case ColorFilter:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new ColorFilterTransformation(Color.argb(80, 255, 0, 0)))
                         .into(holder.image);
                 break;
             case Grayscale:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new GrayscaleTransformation())
                         .into(holder.image);
                 break;
             case RoundedCorners:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new RoundedCornersTransformation(120, 0,
                                 RoundedCornersTransformation.CornerType.DIAGONAL_FROM_TOP_LEFT))
                         .into(holder.image);
@@ -262,77 +266,77 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             case Blur:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new BlurTransformation(mContext, 25, 1))
                         .into(holder.image);
                 break;
             case Toon:
                 Picasso
                         .get()
-                        .load(R.drawable.demo)
+                        .load(file)
                         .transform(new ToonFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Sepia:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new SepiaFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Contrast:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new ContrastFilterTransformation(mContext, 2.0f))
                         .into(holder.image);
                 break;
             case Invert:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new InvertFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Pixel:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new PixelationFilterTransformation(mContext, 20))
                         .into(holder.image);
                 break;
             case Sketch:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new SketchFilterTransformation(mContext))
                         .into(holder.image);
                 break;
             case Swirl:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new SwirlFilterTransformation(mContext, 0.5f, 1.0f, new PointF(0.5f, 0.5f)))
                         .into(holder.image);
                 break;
             case Brightness:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new BrightnessFilterTransformation(mContext, 0.5f))
                         .into(holder.image);
                 break;
             case Kuawahara:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new KuwaharaFilterTransformation(mContext, 25))
                         .into(holder.image);
                 break;
             case Vignette:
                 Picasso
                         .get()
-                        .load(R.drawable.check)
+                        .load(file)
                         .transform(new VignetteFilterTransformation(mContext, new PointF(0.5f, 0.5f),
                                 new float[]{0.0f, 0.0f, 0.0f}, 0f, 0.75f))
                         .into(holder.image);
@@ -343,12 +347,21 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 .name());
     }
 
+    @NonNull
     @Override
-    public MainAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PicassoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater
                 .from(mContext)
                 .inflate(R.layout.layout_list_item, parent, false);
         return new ViewHolder(v);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public File setFile(File file) {
+        File oldfile = this.file;
+        this.file = file;
+        notifyDataSetChanged();
+        return oldfile;
     }
 
     public enum Type {

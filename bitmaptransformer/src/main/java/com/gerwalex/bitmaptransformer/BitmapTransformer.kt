@@ -6,7 +6,11 @@ import android.graphics.*
 import android.graphics.Bitmap.CompressFormat
 import android.net.Uri
 import androidx.annotation.DrawableRes
-import java.io.*
+import com.squareup.picasso.Transformation
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.*
 import kotlin.math.max
 import kotlin.math.min
@@ -16,17 +20,21 @@ import kotlin.math.roundToInt
  * An image resizing library for Android, which allows you to scale an image file to a smaller or bigger one while keeping the aspect ratio.
  * Created by K.K. Ho on 1/9/2017.
  */
-@Suppress("unused")
 class BitmapTransformer {
 
-    constructor(sourceImage: File) {
-        inputStream = FileInputStream(sourceImage)
+    constructor(file: File) {
+        val inputStream = FileInputStream(file)
+        val bmp = BitmapFactory.decodeStream(inputStream, null, options)
+        require(bmp != null) { "No valid InputStream" }
+        bitmap = ExifUtil.rotateBitmap(file, bmp)
     }
 
-    constructor(context: Context, sourceUri: Uri) {
-        val inStream = context.contentResolver.openInputStream(sourceUri)
-        require(inStream != null) { "No valid Uri for File" }
-        inputStream = inStream
+    constructor(context: Context, uri: Uri) {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        require(inputStream != null) { "No valid Uri for File" }
+        val bmp = BitmapFactory.decodeStream(inputStream, null, options)
+        require(bmp != null) { "No valid InputStream" }
+        bitmap = ExifUtil.rotateBitmap(context, uri, bmp)
     }
 
     constructor(context: Context, @DrawableRes sourceDrawableRes: Int) {
@@ -37,14 +45,19 @@ class BitmapTransformer {
             .appendPath(context.resources.getResourceTypeName(sourceDrawableRes))
             .appendPath(context.resources.getResourceEntryName(sourceDrawableRes))
             .build()
-        val inStream = context.contentResolver.openInputStream(uri)
-        require(inStream != null) { "No valid Drawable" }
-        inputStream = inStream
+        val inputStream = context.contentResolver.openInputStream(uri)
+        require(inputStream != null) { "No valid Drawable" }
+        val bmp = BitmapFactory.decodeStream(inputStream, null, options)
+        require(bmp != null) { "No valid InputStream" }
+        bitmap = ExifUtil.rotateBitmap(context, uri, bmp)
     }
 
+    private val bitmap: Bitmap
+    private val options = BitmapFactory
+        .Options()
+        .apply { inJustDecodeBounds = false }
     private var outFilename: String = java.lang.Long.toHexString(System.currentTimeMillis())
     private var outDir: String? = null
-    private val inputStream: InputStream
     private val FULLOPACITY: Int = 255
     private val NOROTATION: Float = 0f
     private var compressFormat: CompressFormat = CompressFormat.PNG
@@ -64,7 +77,7 @@ class BitmapTransformer {
         return this
     }
 
-    fun setOpacity(opacity: Int): BitmapTransformer {
+    fun opacity(opacity: Int): BitmapTransformer {
         this.opacity = opacity
         return this
     }
@@ -76,10 +89,6 @@ class BitmapTransformer {
      * @throws IOException on IO-Error
      */
     fun scaleBitmap(): Bitmap {
-        val options = BitmapFactory.Options()
-        options.inJustDecodeBounds = false
-        val bitmap = BitmapFactory.decodeStream(inputStream, null, options)
-        check(bitmap != null) { "Could not decode Inputstream $inputStream" }
         return scaleBitmap(targetLength, bitmap, options)
     }
 
@@ -99,7 +108,9 @@ class BitmapTransformer {
     }
 
     fun Bitmap.rotate(degrees: Float): Bitmap {
-        val matrix = Matrix().apply { postRotate(degrees) }
+        val matrix = Matrix().apply {
+            postRotate(degrees)
+        }
         val bmp = Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
         recycle()
         return bmp
@@ -120,6 +131,7 @@ class BitmapTransformer {
             }
     }
 
+    @Throws(IOException::class)
     fun scaleBitmapToFile(): File {
         check(outDir != null)
         val outFileName = outFilename + "." + compressFormat.name.lowercase()
@@ -235,7 +247,8 @@ class BitmapTransformer {
     }
 
     @Throws(IOException::class)
-    fun writeBitmapToFile(bitmap: Bitmap, compressFormat: CompressFormat, quality: Int, file: File) {
+    private fun writeBitmapToFile(bitmap: Bitmap, compressFormat: CompressFormat, quality: Int, file: File) {
+//        val bmp = ExifUtil.rotateBitmap(file, bitmap)
         val directory = file.parentFile
         if (directory != null && !directory.exists()) {
             directory.mkdirs()
