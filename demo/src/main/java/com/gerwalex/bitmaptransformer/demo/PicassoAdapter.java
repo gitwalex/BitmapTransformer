@@ -14,29 +14,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gerwalex.bitmaptransformer.BitmapUtils;
+import com.gerwalex.bitmaptransformer.BlurTransformation;
+import com.gerwalex.bitmaptransformer.ColorFilterTransformation;
+import com.gerwalex.bitmaptransformer.CropCircleTransformation;
+import com.gerwalex.bitmaptransformer.CropSquareTransformation;
+import com.gerwalex.bitmaptransformer.CropTransformation;
+import com.gerwalex.bitmaptransformer.GrayscaleTransformation;
+import com.gerwalex.bitmaptransformer.MaskTransformation;
+import com.gerwalex.bitmaptransformer.RoundedCornersTransformation;
+import com.gerwalex.bitmaptransformer.gpu.BrightnessFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.ContrastFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.InvertFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.KuwaharaFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.PixelationFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.SepiaFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.SketchFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.SwirlFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.ToonFilterTransformation;
+import com.gerwalex.bitmaptransformer.gpu.VignetteFilterTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.List;
-
-import jp.wasabeef.picasso.transformations.BlurTransformation;
-import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
-import jp.wasabeef.picasso.transformations.CropCircleTransformation;
-import jp.wasabeef.picasso.transformations.CropSquareTransformation;
-import jp.wasabeef.picasso.transformations.CropTransformation;
-import jp.wasabeef.picasso.transformations.GrayscaleTransformation;
-import jp.wasabeef.picasso.transformations.MaskTransformation;
-import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
-import jp.wasabeef.picasso.transformations.gpu.BrightnessFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.ContrastFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.InvertFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.KuwaharaFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.PixelationFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.SepiaFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.SketchFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.SwirlFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.ToonFilterTransformation;
-import jp.wasabeef.picasso.transformations.gpu.VignetteFilterTransformation;
 
 /**
  * Created by Wasabeef on 2015/01/11.

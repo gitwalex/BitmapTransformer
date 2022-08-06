@@ -29,6 +29,10 @@ class BitmapTransformer {
         bitmap = ExifUtil.rotateBitmap(file, bmp)
     }
 
+    constructor(bmp: Bitmap) {
+        bitmap = bmp
+    }
+
     constructor(context: Context, uri: Uri) {
         val inputStream = context.contentResolver.openInputStream(uri)
         require(inputStream != null) { "No valid Uri for File" }
@@ -89,7 +93,7 @@ class BitmapTransformer {
      * @throws IOException on IO-Error
      */
     fun scaleBitmap(): Bitmap {
-        return scaleBitmap(targetLength, bitmap, options)
+        return scaleBitmap(targetLength, bitmap)
     }
 
     /**
@@ -203,8 +207,7 @@ class BitmapTransformer {
         this.targetLength = max(targetLength, 0)
         return this
     }
-
-    private fun scaleBitmap(targetLength: Int, bitmap: Bitmap, options: BitmapFactory.Options): Bitmap {
+    private fun scaleBitmap(targetLength: Int, bitmap: Bitmap): Bitmap {
         // Get the dimensions of the original bitmap
         val originalWidth = options.outWidth
         val originalHeight = options.outHeight
